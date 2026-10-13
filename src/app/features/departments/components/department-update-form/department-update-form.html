@@ -1,0 +1,118 @@
+@if (isLoading()) {
+  <div class="py-10 text-center" aria-live="polite">
+    <div class="border-muted border-t-primary mx-auto size-8 animate-spin rounded-full border-2"></div>
+    <p class="text-muted-foreground mt-4 text-sm">
+      {{ 'departments.update.loading' | translate }}
+    </p>
+  </div>
+} @else if (loadErrorMessage()) {
+  <div class="py-6 text-center" role="alert">
+    <p class="text-destructive text-sm">{{ loadErrorMessage() }}</p>
+    <div class="mt-5 flex justify-center gap-3">
+      <button
+        type="button"
+        class="hover:bg-accent hover:text-accent-foreground rounded-md border px-4 py-2 text-sm font-medium transition"
+        (click)="cancelled.emit()"
+      >
+        {{ 'departments.update.cancel' | translate }}
+      </button>
+      <button
+        type="button"
+        class="bg-primary text-primary-foreground hover:bg-primary/90 rounded-md px-4 py-2 text-sm font-medium transition"
+        (click)="loadDepartment()"
+      >
+        {{ 'departments.update.retry' | translate }}
+      </button>
+    </div>
+  </div>
+} @else {
+  <form class="space-y-5" [formGroup]="departmentForm" (ngSubmit)="submit()" novalidate>
+    @if (submitErrorMessage()) {
+      <div class="rounded-lg border border-destructive/40 bg-destructive/10 px-4 py-3" role="alert">
+        <p class="text-destructive text-sm">{{ submitErrorMessage() }}</p>
+      </div>
+    }
+
+    <div>
+      <label for="department-update-code" class="mb-2 block text-sm font-medium">
+        {{ 'departments.update.codeLabel' | translate }}
+      </label>
+      <input
+        id="department-update-code"
+        type="text"
+        class="border-input bg-muted text-muted-foreground w-full cursor-not-allowed rounded-md border px-3 py-2 font-mono"
+        [value]="departmentCode()"
+        readonly
+        aria-describedby="department-update-code-help"
+      />
+      <p id="department-update-code-help" class="text-muted-foreground mt-2 text-xs">
+        {{ 'departments.update.codeHelp' | translate }}
+      </p>
+    </div>
+
+    <div>
+      <label for="department-update-name" class="mb-2 block text-sm font-medium">
+        {{ 'departments.update.nameLabel' | translate }}
+      </label>
+      <input
+        id="department-update-name"
+        type="text"
+        formControlName="name"
+        maxlength="150"
+        autocomplete="organization-title"
+        class="border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring w-full rounded-md border px-3 py-2 outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+        [attr.aria-invalid]="departmentForm.controls.name.invalid && departmentForm.controls.name.touched"
+        aria-describedby="department-update-name-error"
+      />
+
+      @if (departmentForm.controls.name.touched && departmentForm.controls.name.errors; as errors) {
+        <p id="department-update-name-error" class="text-destructive mt-2 text-sm">
+          @if (errors['required']) {
+            {{ 'departments.update.nameRequired' | translate }}
+          } @else if (errors['maxlength']) {
+            {{ 'departments.update.nameMaxLength' | translate }}
+          } @else if (errors['pattern']) {
+            {{ 'departments.update.namePattern' | translate }}
+          }
+        </p>
+      }
+    </div>
+
+    <label class="flex items-center justify-between gap-4 rounded-lg border p-4">
+      <span>
+        <span class="block text-sm font-medium">
+          {{ 'departments.update.activeLabel' | translate }}
+        </span>
+        <span class="text-muted-foreground mt-1 block text-xs">
+          {{ 'departments.update.activeHelp' | translate }}
+        </span>
+      </span>
+      <input
+        type="checkbox"
+        formControlName="active"
+        class="accent-primary size-5 shrink-0"
+      />
+    </label>
+
+    <div class="flex flex-col-reverse gap-3 border-t pt-5 sm:flex-row sm:justify-end">
+      <button
+        type="button"
+        class="hover:bg-accent hover:text-accent-foreground rounded-md border px-4 py-2 text-sm font-medium transition disabled:pointer-events-none disabled:opacity-50"
+        [disabled]="isSubmitting()"
+        (click)="cancelled.emit()"
+      >
+        {{ 'departments.update.cancel' | translate }}
+      </button>
+      <button
+        type="submit"
+        class="bg-primary text-primary-foreground hover:bg-primary/90 rounded-md px-4 py-2 text-sm font-medium transition disabled:pointer-events-none disabled:opacity-50"
+        [disabled]="isSubmitting()"
+      >
+        {{
+          (isSubmitting() ? 'departments.update.submitting' : 'departments.update.submit')
+            | translate
+        }}
+      </button>
+    </div>
+  </form>
+}

@@ -1,0 +1,39 @@
+<div class="flex flex-col gap-4 border-t border-slate-800 px-6 py-4 sm:flex-row sm:items-center sm:justify-between">
+  <p class="text-sm text-slate-400">
+    {{
+      'shared.pagination.showing'
+        | translate
+          : { visible: visibleElements(), total: totalElements(), item: itemLabel() }
+    }}
+  </p>
+
+  <nav
+    class="flex items-center gap-3"
+    [attr.aria-label]="'shared.pagination.label' | translate"
+  >
+    <button
+      type="button"
+      class="rounded-lg border border-slate-700 px-3 py-2 text-sm font-medium text-slate-300 transition hover:border-slate-600 hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-40"
+      [disabled]="!canGoPrevious()"
+      (click)="goToPreviousPage()"
+    >
+      {{ 'shared.pagination.previous' | translate }}
+    </button>
+
+    <span class="min-w-24 text-center text-sm text-slate-400">
+      {{
+        'shared.pagination.page'
+          | translate: { current: currentPage(), total: totalPages() || 1 }
+      }}
+    </span>
+
+    <button
+      type="button"
+      class="rounded-lg border border-slate-700 px-3 py-2 text-sm font-medium text-slate-300 transition hover:border-slate-600 hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-40"
+      [disabled]="!canGoNext()"
+      (click)="goToNextPage()"
+    >
+      {{ 'shared.pagination.next' | translate }}
+    </button>
+  </nav>
+</div>

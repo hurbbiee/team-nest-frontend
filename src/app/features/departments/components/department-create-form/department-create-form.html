@@ -1,0 +1,90 @@
+<form class="space-y-5" [formGroup]="departmentForm" (ngSubmit)="submit()" novalidate>
+  @if (errorMessage()) {
+    <div class="rounded-lg border border-destructive/40 bg-destructive/10 px-4 py-3" role="alert">
+      <p class="text-sm text-destructive">{{ errorMessage() }}</p>
+    </div>
+  }
+
+  <div>
+    <label for="department-code" class="mb-2 block text-sm font-medium">
+      {{ 'departments.create.codeLabel' | translate }}
+    </label>
+    <input
+      id="department-code"
+      type="text"
+      formControlName="code"
+      maxlength="50"
+      autocomplete="off"
+      placeholder="ENGINEERING"
+      class="border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring w-full rounded-md border px-3 py-2 font-mono outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+      [attr.aria-invalid]="departmentForm.controls.code.invalid && departmentForm.controls.code.touched"
+      (input)="normalizeCode($event)"
+      aria-describedby="department-code-help department-code-error"
+    />
+    <p id="department-code-help" class="text-muted-foreground mt-2 text-xs">
+      {{ 'departments.create.codeHelp' | translate }}
+    </p>
+
+    @if (departmentForm.controls.code.touched && departmentForm.controls.code.errors; as errors) {
+      <p id="department-code-error" class="text-destructive mt-2 text-sm">
+        @if (errors['required']) {
+            {{ 'departments.create.codeRequired' | translate }}
+        } @else if (errors['maxlength']) {
+            {{ 'departments.create.codeMaxLength' | translate }}
+        } @else if (errors['pattern']) {
+            {{ 'departments.create.codePattern' | translate }}
+        }
+      </p>
+    }
+  </div>
+
+  <div>
+    <label for="department-name" class="mb-2 block text-sm font-medium">
+        {{ 'departments.create.nameLabel' | translate }}
+    </label>
+    <input
+      id="department-name"
+      type="text"
+      formControlName="name"
+      maxlength="150"
+      autocomplete="organization-title"
+      placeholder="Engineering"
+      class="border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring w-full rounded-md border px-3 py-2 outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+      [attr.aria-invalid]="departmentForm.controls.name.invalid && departmentForm.controls.name.touched"
+      aria-describedby="department-name-error"
+    />
+
+    @if (departmentForm.controls.name.touched && departmentForm.controls.name.errors; as errors) {
+      <p id="department-name-error" class="text-destructive mt-2 text-sm">
+        @if (errors['required']) {
+            {{ 'departments.create.nameRequired' | translate }}
+        } @else if (errors['maxlength']) {
+            {{ 'departments.create.nameMaxLength' | translate }}
+        } @else if (errors['pattern']) {
+            {{ 'departments.create.namePattern' | translate }}
+        }
+      </p>
+    }
+  </div>
+
+  <div class="flex flex-col-reverse gap-3 border-t pt-5 sm:flex-row sm:justify-end">
+    <button
+      type="button"
+      class="hover:bg-accent hover:text-accent-foreground rounded-md border px-4 py-2 text-sm font-medium transition disabled:pointer-events-none disabled:opacity-50"
+      [disabled]="isSubmitting()"
+      (click)="cancelled.emit()"
+    >
+      {{ 'departments.create.cancel' | translate }}
+    </button>
+    <button
+      type="submit"
+      class="bg-primary text-primary-foreground hover:bg-primary/90 rounded-md px-4 py-2 text-sm font-medium transition disabled:pointer-events-none disabled:opacity-50"
+      [disabled]="isSubmitting()"
+    >
+      {{
+        (isSubmitting() ? 'departments.create.submitting' : 'departments.create.submit')
+          | translate
+      }}
+    </button>
+  </div>
+</form>

@@ -1,0 +1,100 @@
+{
+  "header": {
+    "phase": "Phase 1",
+    "languageSwitcher": "Select language",
+    "english": "English",
+    "thai": "Thai"
+  },
+  "departments": {
+    "common": {
+      "items": "departments"
+    },
+    "create": {
+      "title": "Create department",
+      "description": "Add a new department to your organization.",
+      "codeLabel": "Department code",
+      "codeHelp": "Start with A–Z. Use only uppercase letters, numbers, underscore, or hyphen.",
+      "codeRequired": "Department code is required.",
+      "codeMaxLength": "Department code must not exceed 50 characters.",
+      "codePattern": "Department code must start with an uppercase letter and use only A–Z, 0–9, _ or -.",
+      "nameLabel": "Department name",
+      "nameRequired": "Department name is required.",
+      "nameMaxLength": "Department name must not exceed 150 characters.",
+      "namePattern": "Department name must not have spaces at the beginning or end.",
+      "cancel": "Cancel",
+      "submit": "Create department",
+      "submitting": "Creating...",
+      "success": "Department created successfully.",
+      "fallbackError": "Unable to create the department. Please try again."
+    },
+    "update": {
+      "title": "Update department",
+      "description": "Update the department name and active status.",
+      "loading": "Loading department...",
+      "codeLabel": "Department code",
+      "codeHelp": "Department code cannot be changed.",
+      "nameLabel": "Department name",
+      "nameRequired": "Department name is required.",
+      "nameMaxLength": "Department name must not exceed 150 characters.",
+      "namePattern": "Department name must not have spaces at the beginning or end.",
+      "activeLabel": "Active department",
+      "activeHelp": "Inactive departments remain saved but are marked unavailable.",
+      "cancel": "Cancel",
+      "retry": "Try again",
+      "submit": "Save changes",
+      "submitting": "Saving...",
+      "success": "Department updated successfully.",
+      "loadFallbackError": "Unable to load the department. Please try again.",
+      "submitFallbackError": "Unable to update the department. Please try again."
+    },
+    "delete": {
+      "title": "Delete department?",
+      "description": "This department will no longer appear in normal department lists.",
+      "cancel": "Cancel",
+      "submit": "Delete department",
+      "submitting": "Deleting...",
+      "success": "Department deleted successfully.",
+      "fallbackError": "Unable to delete the department. Please try again."
+    },
+    "list": {
+      "eyebrow": "Organization",
+      "title": "Departments",
+      "description": "View the departments configured for Team Nest.",
+      "create": "Create department",
+      "searchLabel": "Search departments",
+      "searchPlaceholder": "Search by code or name",
+      "loading": "Loading departments...",
+      "errorTitle": "Unable to load departments",
+      "fallbackError": "Unable to load departments. Please try again.",
+      "retry": "Try again",
+      "noMatchesTitle": "No matching departments",
+      "noMatchesDescription": "Try searching with a different code or name.",
+      "emptyTitle": "No departments yet",
+      "emptyDescription": "Create a department to start building your organization.",
+      "columns": {
+        "id": "ID",
+        "code": "Code",
+        "name": "Name",
+        "status": "Status",
+        "actions": "Actions"
+      },
+      "status": {
+        "active": "Active",
+        "inactive": "Inactive"
+      },
+      "actions": {
+        "edit": "Edit",
+        "delete": "Delete"
+      }
+    }
+  },
+  "shared": {
+    "pagination": {
+      "label": "Pagination",
+      "showing": "Showing {{visible}} of {{total}} {{item}}",
+      "previous": "Previous",
+      "next": "Next",
+      "page": "Page {{current}} of {{total}}"
+    }
+  }
+}

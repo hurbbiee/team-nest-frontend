@@ -1,0 +1,223 @@
+<section aria-labelledby="department-list-title">
+  <div class="mb-8 flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
+    <div>
+      <p class="text-sm font-semibold uppercase tracking-[0.2em] text-emerald-400">
+        {{ 'departments.list.eyebrow' | translate }}
+      </p>
+      <h1 id="department-list-title" class="mt-2 text-3xl font-bold tracking-tight text-slate-100">
+        {{ 'departments.list.title' | translate }}
+      </h1>
+      <p class="mt-2 text-slate-400">
+        {{ 'departments.list.description' | translate }}
+      </p>
+    </div>
+
+    <hlm-dialog>
+      <button
+        hlmDialogTrigger
+        type="button"
+        class="inline-flex items-center justify-center rounded-xl bg-emerald-400 px-5 py-3 text-sm font-semibold text-slate-950 transition hover:bg-emerald-300"
+      >
+        {{ 'departments.list.create' | translate }}
+      </button>
+
+      <hlm-dialog-content *hlmDialogPortal="let ctx" class="sm:max-w-lg">
+        <hlm-dialog-header>
+          <h2 hlmDialogTitle>{{ 'departments.create.title' | translate }}</h2>
+          <p hlmDialogDescription>
+            {{ 'departments.create.description' | translate }}
+          </p>
+        </hlm-dialog-header>
+
+        <app-department-create-form
+          (created)="ctx.close(); loadDepartments()"
+          (cancelled)="ctx.close()"
+        />
+      </hlm-dialog-content>
+    </hlm-dialog>
+  </div>
+
+  <div class="mb-6 max-w-xl">
+    <label for="department-search" class="mb-2 block text-sm font-medium text-slate-300">
+      {{ 'departments.list.searchLabel' | translate }}
+    </label>
+    <input
+      id="department-search"
+      type="search"
+      class="w-full rounded-xl border border-slate-700 bg-slate-900 px-4 py-3 text-slate-100 outline-none transition placeholder:text-slate-500 focus:border-emerald-400 focus:ring-2 focus:ring-emerald-400/20"
+      [placeholder]="'departments.list.searchPlaceholder' | translate"
+      autocomplete="off"
+      [formControl]="searchControl"
+    />
+  </div>
+
+  @if (isLoading()) {
+    <div class="rounded-2xl border border-slate-800 bg-slate-900 px-6 py-16 text-center" aria-live="polite">
+      <div class="mx-auto size-8 animate-spin rounded-full border-2 border-slate-700 border-t-emerald-400"></div>
+      <p class="mt-4 text-sm text-slate-400">{{ 'departments.list.loading' | translate }}</p>
+    </div>
+  } @else if (errorMessage()) {
+    <div
+      class="rounded-2xl border border-red-900/60 bg-red-950/30 px-6 py-12 text-center"
+      role="alert"
+    >
+      <h2 class="text-lg font-semibold text-red-200">
+        {{ 'departments.list.errorTitle' | translate }}
+      </h2>
+      <p class="mt-2 text-sm text-red-300/80">{{ errorMessage() }}</p>
+      <button
+        type="button"
+        class="mt-6 rounded-xl bg-red-200 px-4 py-2 text-sm font-semibold text-red-950 transition hover:bg-red-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-200"
+        (click)="loadDepartments()"
+      >
+        {{ 'departments.list.retry' | translate }}
+      </button>
+    </div>
+  } @else if (departments().length === 0) {
+    <div class="rounded-2xl border border-dashed border-slate-700 bg-slate-900/60 px-6 py-16 text-center">
+      @if (searchControl.value.trim()) {
+        <h2 class="text-lg font-semibold text-slate-200">
+          {{ 'departments.list.noMatchesTitle' | translate }}
+        </h2>
+        <p class="mt-2 text-sm text-slate-400">
+          {{ 'departments.list.noMatchesDescription' | translate }}
+        </p>
+      } @else {
+        <h2 class="text-lg font-semibold text-slate-200">
+          {{ 'departments.list.emptyTitle' | translate }}
+        </h2>
+        <p class="mt-2 text-sm text-slate-400">
+          {{ 'departments.list.emptyDescription' | translate }}
+        </p>
+      }
+    </div>
+  } @else {
+    <div class="overflow-hidden rounded-2xl border border-slate-800 bg-slate-900">
+      <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-slate-800 text-left text-sm">
+          <thead class="bg-slate-900/80 text-xs uppercase tracking-wider text-slate-400">
+            <tr>
+              <th scope="col" class="px-6 py-4 font-medium">{{ 'departments.list.columns.id' | translate }}</th>
+              <th scope="col" class="px-6 py-4 font-medium">{{ 'departments.list.columns.code' | translate }}</th>
+              <th scope="col" class="px-6 py-4 font-medium">{{ 'departments.list.columns.name' | translate }}</th>
+              <th scope="col" class="px-6 py-4 font-medium">{{ 'departments.list.columns.status' | translate }}</th>
+              <th scope="col" class="px-6 py-4 text-right font-medium">{{ 'departments.list.columns.actions' | translate }}</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-800">
+            @for (department of departments(); track department.id) {
+              <tr class="text-slate-300 transition hover:bg-slate-800/50">
+                <td class="px-6 py-4 text-slate-500">{{ department.id }}</td>
+                <td class="px-6 py-4 font-mono text-emerald-300">{{ department.code }}</td>
+                <td class="px-6 py-4 font-medium text-slate-100">{{ department.name }}</td>
+                <td class="px-6 py-4">
+                  @if (department.active) {
+                    <span class="rounded-full bg-emerald-400/10 px-3 py-1 text-xs font-medium text-emerald-300">
+                      {{ 'departments.list.status.active' | translate }}
+                    </span>
+                  } @else {
+                    <span class="rounded-full bg-slate-700 px-3 py-1 text-xs font-medium text-slate-300">
+                      {{ 'departments.list.status.inactive' | translate }}
+                    </span>
+                  }
+                </td>
+                <td class="px-6 py-4 text-right">
+                  <div class="flex justify-end gap-2">
+                    <hlm-dialog>
+                      <button
+                        hlmDialogTrigger
+                        type="button"
+                        class="rounded-lg border border-slate-700 px-3 py-2 text-sm font-medium text-slate-300 transition hover:border-emerald-400/50 hover:bg-emerald-400/10 hover:text-emerald-300"
+                      >
+                        {{ 'departments.list.actions.edit' | translate }}
+                      </button>
+
+                      <hlm-dialog-content *hlmDialogPortal="let ctx" class="sm:max-w-lg">
+                        <hlm-dialog-header>
+                          <h2 hlmDialogTitle>{{ 'departments.update.title' | translate }}</h2>
+                          <p hlmDialogDescription>
+                            {{ 'departments.update.description' | translate }}
+                          </p>
+                        </hlm-dialog-header>
+
+                        <app-department-update-form
+                          [departmentId]="department.id"
+                          (updated)="ctx.close(); loadDepartments()"
+                          (cancelled)="ctx.close()"
+                        />
+                      </hlm-dialog-content>
+                    </hlm-dialog>
+
+                    <hlm-alert-dialog>
+                      <button
+                        hlmAlertDialogTrigger
+                        type="button"
+                        class="rounded-lg border border-red-900/70 px-3 py-2 text-sm font-medium text-red-300 transition hover:border-red-700 hover:bg-red-950/50"
+                        (click)="prepareDelete()"
+                      >
+                        {{ 'departments.list.actions.delete' | translate }}
+                      </button>
+
+                      <hlm-alert-dialog-content *hlmAlertDialogPortal="let ctx">
+                        <hlm-alert-dialog-header>
+                          <h2 hlmAlertDialogTitle>{{ 'departments.delete.title' | translate }}</h2>
+                          <p hlmAlertDialogDescription>
+                            <span class="block">
+                              {{ department.code }} — {{ department.name }}
+                            </span>
+                            <span class="mt-2 block">
+                              {{ 'departments.delete.description' | translate }}
+                            </span>
+                          </p>
+                        </hlm-alert-dialog-header>
+
+                        @if (deleteErrorMessage()) {
+                          <div
+                            class="rounded-lg border border-destructive/40 bg-destructive/10 px-3 py-2"
+                            role="alert"
+                          >
+                            <p class="text-destructive text-sm">{{ deleteErrorMessage() }}</p>
+                          </div>
+                        }
+
+                        <hlm-alert-dialog-footer>
+                          <button
+                            hlmAlertDialogCancel
+                            [disabled]="deletingDepartmentId() === department.id"
+                          >
+                            {{ 'departments.delete.cancel' | translate }}
+                          </button>
+                          <button
+                            hlmAlertDialogAction
+                            variant="destructive"
+                            [disabled]="deletingDepartmentId() !== null"
+                            (click)="deleteDepartment(department.id, ctx.close)"
+                          >
+                            {{
+                              (deletingDepartmentId() === department.id
+                                ? 'departments.delete.submitting'
+                                : 'departments.delete.submit') | translate
+                            }}
+                          </button>
+                        </hlm-alert-dialog-footer>
+                      </hlm-alert-dialog-content>
+                    </hlm-alert-dialog>
+                  </div>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+
+      <app-table-pagination
+        [currentPage]="currentPage()"
+        [totalPages]="totalPages()"
+        [totalElements]="totalElements()"
+        [visibleElements]="departments().length"
+        [itemLabel]="'departments.common.items' | translate"
+        (pageChange)="goToPage($event)"
+      />
+    </div>
+  }
+</section>

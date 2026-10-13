@@ -1,0 +1,47 @@
+<header class="border-b border-slate-800 bg-slate-950/90 backdrop-blur">
+  <div class="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
+    <div class="flex items-center gap-3">
+      <span class="flex size-9 items-center justify-center rounded-xl bg-emerald-400 font-bold text-slate-950">
+        TN
+      </span>
+      <span class="font-semibold tracking-tight text-slate-100">{{ appName() }}</span>
+    </div>
+
+    <div class="flex items-center gap-3">
+      <span class="hidden rounded-full border border-slate-700 px-3 py-1 text-xs font-medium text-slate-300 sm:inline-flex">
+        {{ 'header.phase' | translate }}
+      </span>
+
+      <div
+        class="flex rounded-lg border border-slate-700 p-1"
+        role="group"
+        [attr.aria-label]="'header.languageSwitcher' | translate"
+      >
+        <button
+          type="button"
+          class="rounded-md px-2.5 py-1 text-xs font-semibold transition"
+          [class.bg-emerald-400]="currentLanguage() === 'en'"
+          [class.text-slate-950]="currentLanguage() === 'en'"
+          [class.text-slate-400]="currentLanguage() !== 'en'"
+          [attr.aria-label]="'header.english' | translate"
+          [attr.aria-pressed]="currentLanguage() === 'en'"
+          (click)="setLanguage('en')"
+        >
+          EN
+        </button>
+        <button
+          type="button"
+          class="rounded-md px-2.5 py-1 text-xs font-semibold transition"
+          [class.bg-emerald-400]="currentLanguage() === 'th'"
+          [class.text-slate-950]="currentLanguage() === 'th'"
+          [class.text-slate-400]="currentLanguage() !== 'th'"
+          [attr.aria-label]="'header.thai' | translate"
+          [attr.aria-pressed]="currentLanguage() === 'th'"
+          (click)="setLanguage('th')"
+        >
+          TH
+        </button>
+      </div>
+    </div>
+  </div>
+</header>
